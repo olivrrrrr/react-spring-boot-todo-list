@@ -11,7 +11,7 @@ function TodoItem(props) {
             "content-type" : "application/json",
         },
         body: JSON.stringify(todoItem)
-    }).then(resp=>
+         }).then(resp=>
         resp.json()).then((data) =>{
         setTodoItem(data);
         });
@@ -21,12 +21,27 @@ function TodoItem(props) {
         setTodoItem({...todoItem, complete: !todoItem.complete}); 
     } 
 
+    function handleDelete(e){
+    
+        fetch(`http://localhost:8080/api/v1/todolist/${todoItem.id}`,{
+          method: 'DELETE' , 
+          headers: {
+              "content-type" : "application/json",
+          },
+          body : JSON.stringify(todoItem)
+          }).then(console.log("deleted"))
+          e.preventDefault();
+    }
+
     return (
         <div >
             <input type="checkbox" 
             checked={todoItem.complete} 
             onChange={handleOnClick} /> {" "}
-            <span>{todoItem.description}</span>
+            {todoItem.complete ? 
+            (<span style={{textDecoration : "line-through"}}>{todoItem.description}</span>) 
+            : (<span>{todoItem.description}</span>)}
+            <button onClick={handleDelete}>delete</button>
         </div> 
     )
 }
