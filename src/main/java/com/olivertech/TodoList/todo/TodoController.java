@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/todolist")
+@CrossOrigin(origins = "http://localhost:3002/")
 public class TodoController{
 
     private final TodoService todoService;
