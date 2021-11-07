@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 function TodoItem(props) {
 
+    const {emitDeleteTodoItem} = props; 
     const [todoItem, setTodoItem] = useState(props.data); 
 
     useEffect(()=>{
@@ -12,8 +13,8 @@ function TodoItem(props) {
         },
         body: JSON.stringify(todoItem)
          }).then(resp=>
-        resp.json()).then((data) =>{
-        setTodoItem(data);
+        resp.json()).then(() =>{
+          setTodoItem(todoItem);
         });
     }, [todoItem])
 
@@ -21,20 +22,18 @@ function TodoItem(props) {
         setTodoItem({...todoItem, complete: !todoItem.complete}); 
     } 
 
-    function handleDelete(e){
-    
+    function handleDelete(){
         fetch(`http://localhost:8080/api/v1/todolist/${todoItem.id}`,{
           method: 'DELETE' , 
           headers: {
               "content-type" : "application/json",
-          },
-          body : JSON.stringify(todoItem)
-          }).then(console.log("deleted"))
-          e.preventDefault();
+          }
+          }).then(() => {
+            emitDeleteTodoItem(todoItem)})
     }
 
     return (
-        <div >
+        <div>
             <input type="checkbox" 
             checked={todoItem.complete} 
             onChange={handleOnClick} /> {" "}

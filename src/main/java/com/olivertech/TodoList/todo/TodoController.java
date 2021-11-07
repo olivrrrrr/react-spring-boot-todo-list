@@ -29,10 +29,15 @@ public class TodoController{
         return todoService.getSpecificTodo(id);
     }
 
-    @PostMapping
-    public void addTodo(@RequestBody Todo todo){
-        todoService.addTodo(todo);
-    }
+     @PostMapping
+     public void addTodo(@RequestBody Todo todo){
+         todoService.addTodo(todo);
+     }
+
+//    @PostMapping
+//    public void addTodo(){
+//        todoService.createTodoItem();
+//    }
 
     @PutMapping("{id}")
     public void updateTodo(@PathVariable("id") Integer id, @RequestBody Todo todo){

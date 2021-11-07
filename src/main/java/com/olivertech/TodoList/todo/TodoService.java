@@ -36,4 +36,10 @@ public class TodoService {
     public void updateTodo(Integer id, Todo todo) {
         todoDAO.updateTodo(id, todo);
     }
+
+//    public void createTodoItem() {
+//        Todo todoItem = new Todo();
+//        todoItem.setComplete(false);
+//
+//    }
 }

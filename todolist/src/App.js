@@ -1,5 +1,7 @@
 import TodoItem from './components/todoItem';
 import {useEffect, useState} from 'react';
+import uuid from 'react-uuid';
+
 
 function App() {
 
@@ -14,30 +16,35 @@ function App() {
               "content-type" : "application/json"
           }}).then(resp=>
          resp.json()).then((data) =>{
-         console.log(data)
          setTodoList(data);
          });
         }
-    });
+    }, [todoList]);
 
     function handleChange(e){
          setChange(e.target.value);
         }
 
-   function handleSubmit(e){
-        
-        const todoItem = {description: change, complete: false};
-        console.log(todoItem); 
+    function handleDeleteTodoItem(item){
+        const updatedTodoItems = todoList.filter(aTodoItem => aTodoItem !== item.id);
+        setTodoList([...updatedTodoItems]); 
+    }
 
+
+   function handleSubmit(e){
+       const todoItem = {description: change, complete: false};
+        
         fetch(`http://localhost:8080/api/v1/todolist/`,{
           method: 'POST' , 
           headers: {
               "content-type" : "application/json"
           },
-          body : JSON.stringify(todoItem)
-          }).then(console.log("new"))
-          e.preventDefault();
+          body: JSON.stringify(todoItem)
+          }).then(()=>{
+            setTodoList([...todoList, todoItem])})
+        e.preventDefault();
   }
+
 
   return (
     <div> 
@@ -47,9 +54,7 @@ function App() {
        </form>
       {todoList ? todoList.map(todoItem =>{
           return (
-          <div>
-            <TodoItem  key={todoItem.id} data={todoItem}/>
-          </div>
+            <TodoItem key={todoItem.id} data={todoItem} emitDeleteTodoItem={handleDeleteTodoItem}/>
           )
     }) : "loading..." }
   </div>
